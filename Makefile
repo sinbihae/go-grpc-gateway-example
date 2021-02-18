@@ -1,23 +1,6 @@
 # Makefile
 
-.PHONY: generate-user-proto
-generate-user-proto:
-	protoc -I=. \
-	    --go_out . \
-	    --go_opt paths=source_relative \
-	    --go-grpc_out . --go-grpc_opt paths=source_relative \
-	    protos/v1/user/user.proto
-
-.PHONY: generate-post-proto
-generate-post-proto:
-	protoc -I=. \
-	    --go_out . \
-	    --go_opt paths=source_relative \
-	    --go-grpc_out . --go-grpc_opt paths=source_relative \
-	    protos/v1/post/post.proto
-
-.PHONY: generate-user-v2-proto
-generate-user-v2-proto:
+generate-proto:
 	protoc -I=. \
 	    --go_out . \
         --go_opt paths=source_relative \
@@ -25,8 +8,7 @@ generate-user-v2-proto:
         --go-grpc_opt paths=source_relative \
 	    protos/v2/user/user.proto
 
-.PHONY: generate-user-v2-gateway-proto
-generate-user-v2-gateway-proto:
+generate-gateway-proto:
 	protoc -I . \
 		-I./grpc-gateway/third_party/googleapis/ \
 	    --grpc-gateway_out . \
