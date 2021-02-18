@@ -1,7 +1,7 @@
 package data
 
 import (
-	userpb "go-grpc-gateway-example/protos/v2/user"
+	userpb "github.com/sinbihae/go-grpc-gateway-example/go-grpc-gateway-example/protos/v2/user"
 )
 
 var UsersV2 = []*userpb.UserMessage{

@@ -1,4 +1,4 @@
-module go-grpc-gateway-sample
+module github.com/sinbihae/go-grpc-gateway-example
 
 go 1.14
 

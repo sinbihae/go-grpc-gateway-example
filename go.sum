@@ -117,6 +117,7 @@ github.com/prometheus/client_model v0.0.0-20190812154241-14fe0d1b01d4/go.mod h1:
 github.com/rogpeppe/fastuuid v1.2.0/go.mod h1:jVj6XXZzXRy/MSR5jhDC/2q6DgLz+nrA6LYCDYWNEvQ=
 github.com/rogpeppe/go-internal v1.3.0/go.mod h1:M8bDsm7K2OlrFYOpmOWEs/qY81heoFRclV5y23lUDJ4=
 github.com/sinbihae/go-grpc-gateway-example v0.0.0-20210218002937-8036741d30be h1:4EGecMBMyMMaSGC+H8E7rsZLN03yhOvYFojHGcsm+ts=
+github.com/sinbihae/go-grpc-gateway-example v0.0.0-20210218005301-f28d20349392 h1:8tAfzQguYv4zyD4GE+g64Su3Q6mWT2IQ7cmAmqdU3f8=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.4.0/go.mod h1:j7eGeouHqKxXV5pUuKE4zz7dFj8WfuZ+81PSLYec5m4=
 github.com/stretchr/testify v1.5.1/go.mod h1:5W2xD1RspED5o8YsWQXVCued0rvSQ+mT+I5cxcmMvtA=
