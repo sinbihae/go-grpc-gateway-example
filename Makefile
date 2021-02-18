@@ -2,7 +2,7 @@
 
 generate-proto:
 	protoc -I=. \
-		-I./protos
+		-I./protos \
 	    --go_out . \
         --go_opt paths=source_relative \
         --go-grpc_out . \
@@ -11,7 +11,7 @@ generate-proto:
 
 generate-gateway-proto:
 	protoc -I . \
-		-I./protos
+		-I./protos \
 		-I./grpc-gateway/third_party/googleapis/ \
 	    --grpc-gateway_out . \
 	    --grpc-gateway_opt logtostderr=true \
