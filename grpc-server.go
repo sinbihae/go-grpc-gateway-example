@@ -7,8 +7,9 @@ import (
 
 	"google.golang.org/grpc"
 
-	"github.com/sinbihae/go-grpc-gateway-example/data"
-	userpb "github.com/sinbihae/go-grpc-gateway-example/protos/v2/user"
+	"go-grpc-gateway-sample/data"
+
+	userpb "go-grpc-gateway-sample/protos/v2/user"
 )
 
 const portNumber = "9001"
