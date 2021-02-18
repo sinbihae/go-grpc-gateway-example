@@ -1,9 +1,8 @@
-module github.com/sinbihae/go-grpc-gateway-example
+module go-grpc-gateway-sample
 
-go 1.14
+go 1.15
 
 require (
-	github.com/sinbihae/go-grpc-gateway-example
 	github.com/golang/protobuf v1.4.3
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.1.0
