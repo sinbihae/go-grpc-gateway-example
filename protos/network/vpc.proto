@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package network.vpc;
+
+import "google/api/annotations.proto";
+
+option go_package = "github.com/sinbihae/go-grpc-gateway-example/protos/network/vpc";
+
+service Vpc {
+    rpc GetVpc(GetVpcRequest) returns (GetVpcResponse) {
+        option (google.api.http) = {
+            get: "/v1/vpcs/{vpc_no}"
+        };
+    }
+    rpc ListVpcs(ListVpcsRequest) returns (ListVpcsResponse) {
+        option (google.api.http) = {
+            get: "/v1/vpcs"
+        };
+    }
+}
+
+message VpcStatusMessage {
+    string code = 1;
+    string codeName = 2;
+}
+
+message VpcMessage {
+    string vpcNo = 1;
+    string vpcName = 2;
+    string ipv4CidrBlock = 3;
+    VpcStatusMessage vpcStatusMessage =4;
+}
+
+message GetVpcRequest {
+    string vpc_no = 1;
+}
+
+message GetVpcResponse {
+    VpcMessage vpc_message = 1;
+}
+
+message ListVpcsRequest {}
+
+message ListVpcsResponse {
+    repeated VpcMessage vpc_messages = 1;
+}
