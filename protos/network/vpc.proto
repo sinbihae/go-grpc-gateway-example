@@ -9,12 +9,12 @@ option go_package = "github.com/sinbihae/go-grpc-gateway-example/protos/network/
 service Vpc {
     rpc GetVpc(GetVpcRequest) returns (GetVpcResponse) {
         option (google.api.http) = {
-            get: "/v1/vpcs/{vpc_no}"
+            get: "/v1/network/vpcs/{vpcNo}"
         };
     }
     rpc ListVpcs(ListVpcsRequest) returns (ListVpcsResponse) {
         option (google.api.http) = {
-            get: "/v1/vpcs"
+            get: "/v1/network/vpcs"
         };
     }
 }
@@ -25,14 +25,16 @@ message VpcStatusMessage {
 }
 
 message VpcMessage {
-    string vpcNo = 1;
-    string vpcName = 2;
-    string ipv4CidrBlock = 3;
-    VpcStatusMessage vpcStatusMessage =4;
+    string vpcNo = 1 [json_name="id"];
+    string vpcName = 2 [json_name="name"];
+    string ipv4CidrBlock = 3 [json_name="cidrBlock"];
+    string vpcStatus = 4 [json_name="status"];
+    string regionCode = 5 [json_name="region"];
+    string createDate = 6 [json_name="createdDate"];
 }
 
 message GetVpcRequest {
-    string vpc_no = 1;
+    string vpcNo = 1;
 }
 
 message GetVpcResponse {
