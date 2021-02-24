@@ -2,14 +2,16 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net"
 
-	"google.golang.org/grpc"
-
 	"github.com/sinbihae/go-grpc-gateway-example/data"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/metadata"
 
 	networkpb "github.com/sinbihae/go-grpc-gateway-example/protos/network"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 const portNumber2 = "9001"
@@ -18,32 +20,70 @@ type vpcServer struct {
 	networkpb.VpcServer
 }
 
-func (s *vpcServer) GetVpc(ctx context.Context, req *networkpb.GetVpcRequest) (*networkpb.GetVpcResponse, error) {
-	VpcNo := req.VpcNo
+func (s *vpcServer) GetVpc(ctx context.Context, req *networkpb.VpcSearch) (*networkpb.VpcsResponse, error) {
+	Id := req.Id
 
-	var vpcMessage *networkpb.VpcMessage
+	vpcMessages := make([]*networkpb.VpcMessage, 1)
 	for _, u := range data.Vpcs {
-		if u.VpcNo != VpcNo {
-			continue
+		if u.Id == Id {
+			vpcMessages[0] = u
+			break
 		}
-		vpcMessage = u
-		break
 	}
 
-	return &networkpb.GetVpcResponse{
-		VpcMessage: vpcMessage,
+	return &networkpb.VpcsResponse{
+		VpcMessages: vpcMessages,
 	}, nil
 }
 
-func (s *vpcServer) ListVpcs(ctx context.Context, req *networkpb.ListVpcsRequest) (*networkpb.ListVpcsResponse, error) {
+func (s *vpcServer) ListVpcs(ctx context.Context, req *networkpb.VpcSearch) (*networkpb.VpcsResponse, error) {
 	vpcMessages := make([]*networkpb.VpcMessage, 3)
 	for i, u := range data.Vpcs {
 		vpcMessages[i] = u
 	}
 
-	return &networkpb.ListVpcsResponse{
+	return &networkpb.VpcsResponse{
 		VpcMessages: vpcMessages,
 	}, nil
+}
+
+func (s *vpcServer) CreateVpc(ctx context.Context, req *networkpb.VpcMessage) (*networkpb.VpcsResponse, error) {
+
+	fmt.Printf("req:%s", req)
+	vpcMessages := make([]*networkpb.VpcMessage, 1)
+	vpcMessages[0] = req
+
+	return &networkpb.VpcsResponse{
+		VpcMessages: vpcMessages,
+	}, nil
+}
+
+func (s *vpcServer) UpdateVpc(ctx context.Context, req *networkpb.VpcMessage) (*networkpb.VpcsResponse, error) {
+
+	fmt.Printf("req:%s", req)
+	vpcMessages := make([]*networkpb.VpcMessage, 1)
+	vpcMessages[0] = req
+
+	return &networkpb.VpcsResponse{
+		VpcMessages: vpcMessages,
+	}, nil
+}
+
+func (s *vpcServer) DeleteVpc(ctx context.Context, req *networkpb.VpcSearch) (*emptypb.Empty, error) {
+	Id := req.Id
+	fmt.Printf("Id:%s", Id)
+
+	koscomAccessKey := ""
+	if md, ok := metadata.FromIncomingContext(ctx); ok {
+		if key, ok := md["x-koscom-access-key"]; ok {
+			koscomAccessKey = key[0]
+		}
+		fmt.Println(md)
+	}
+
+	fmt.Printf("key:%s", koscomAccessKey)
+
+	return &emptypb.Empty{}, nil
 }
 
 func main() {

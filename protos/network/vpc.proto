@@ -3,18 +3,40 @@ syntax = "proto3";
 package network.vpc;
 
 import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
 
 option go_package = "github.com/sinbihae/go-grpc-gateway-example/protos/network/vpc";
 
 service Vpc {
-    rpc GetVpc(GetVpcRequest) returns (GetVpcResponse) {
+    rpc GetVpc(VpcSearch) returns (VpcsResponse) {
         option (google.api.http) = {
-            get: "/v1/network/vpcs/{vpcNo}"
+            get: "/v1/network/vpcs/{id}"
         };
     }
-    rpc ListVpcs(ListVpcsRequest) returns (ListVpcsResponse) {
+    rpc ListVpcs(VpcSearch) returns (VpcsResponse) {
         option (google.api.http) = {
             get: "/v1/network/vpcs"
+        };
+    }
+    rpc CreateVpc(VpcMessage) returns (VpcsResponse) {
+        option (google.api.http) = {
+            post: "/v1/network/vpcs/{id}"
+            body: "*"
+        };
+    }
+    rpc UpdateVpc(VpcMessage) returns (VpcsResponse) {
+        option (google.api.http) = {
+            put: "/v1/network/vpcs/{id}"
+            body: "*"
+            additional_bindings {
+                patch: "/v1/network/vpcs/{id}"
+                body: "*"
+            }
+        };
+    }
+    rpc DeleteVpc(VpcSearch) returns (google.protobuf.Empty) {
+        option (google.api.http) = {
+            delete: "/v1/network/vpcs/{id}"
         };
     }
 }
@@ -25,24 +47,47 @@ message VpcStatusMessage {
 }
 
 message VpcMessage {
-    string vpcNo = 1 [json_name="id"];
-    string vpcName = 2 [json_name="name"];
-    string ipv4CidrBlock = 3 [json_name="cidrBlock"];
-    string vpcStatus = 4 [json_name="status"];
-    string regionCode = 5 [json_name="region"];
-    string createDate = 6 [json_name="createdDate"];
+    string id = 1 [json_name="Id"];
+    string name = 2 [json_name="Name"];
+    string cidrBlock = 3 [json_name="CidrBlock"];
+    string status = 4 [json_name="Status"];
+    string region = 5 [json_name="Region"];
+    string createdDate = 6 [json_name="CreatedDate"];
 }
 
-message GetVpcRequest {
-    string vpcNo = 1;
+message VpcSearch {
+    string id = 1;
+    string region = 2;
+    string status = 3;
 }
 
-message GetVpcResponse {
-    VpcMessage vpc_message = 1;
-}
-
-message ListVpcsRequest {}
-
-message ListVpcsResponse {
+message VpcsResponse {
     repeated VpcMessage vpc_messages = 1;
 }
+
+
+// message VpcNcpMessage {
+//     string id = 1 [json_name="vpcNo"];
+//     string name = 2 [json_name="vpcName"];
+//     string cidrBlock = 3 [json_name="ipv4CidrBlock"];
+//     string status = 4 [json_name="vpcStatus"];
+//     string region = 5 [json_name="regionCode"];
+//     string createdDate = 6 [json_name="createDate"];
+// }
+
+
+// message GetVpcRequest {
+//     string id = 1;
+//     string region = 2;
+//     string status = 3;
+// }
+
+// message GetVpcResponse {
+//     VpcMessage vpc_message = 1;
+// }
+
+// message ListVpcsRequest {}
+
+// message ListVpcsResponse {
+//     repeated VpcMessage vpc_messages = 1;
+// }

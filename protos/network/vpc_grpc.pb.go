@@ -7,6 +7,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -18,8 +19,11 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type VpcClient interface {
-	GetVpc(ctx context.Context, in *GetVpcRequest, opts ...grpc.CallOption) (*GetVpcResponse, error)
-	ListVpcs(ctx context.Context, in *ListVpcsRequest, opts ...grpc.CallOption) (*ListVpcsResponse, error)
+	GetVpc(ctx context.Context, in *VpcSearch, opts ...grpc.CallOption) (*VpcsResponse, error)
+	ListVpcs(ctx context.Context, in *VpcSearch, opts ...grpc.CallOption) (*VpcsResponse, error)
+	CreateVpc(ctx context.Context, in *VpcMessage, opts ...grpc.CallOption) (*VpcsResponse, error)
+	UpdateVpc(ctx context.Context, in *VpcMessage, opts ...grpc.CallOption) (*VpcsResponse, error)
+	DeleteVpc(ctx context.Context, in *VpcSearch, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type vpcClient struct {
@@ -30,8 +34,8 @@ func NewVpcClient(cc grpc.ClientConnInterface) VpcClient {
 	return &vpcClient{cc}
 }
 
-func (c *vpcClient) GetVpc(ctx context.Context, in *GetVpcRequest, opts ...grpc.CallOption) (*GetVpcResponse, error) {
-	out := new(GetVpcResponse)
+func (c *vpcClient) GetVpc(ctx context.Context, in *VpcSearch, opts ...grpc.CallOption) (*VpcsResponse, error) {
+	out := new(VpcsResponse)
 	err := c.cc.Invoke(ctx, "/network.vpc.Vpc/GetVpc", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -39,9 +43,36 @@ func (c *vpcClient) GetVpc(ctx context.Context, in *GetVpcRequest, opts ...grpc.
 	return out, nil
 }
 
-func (c *vpcClient) ListVpcs(ctx context.Context, in *ListVpcsRequest, opts ...grpc.CallOption) (*ListVpcsResponse, error) {
-	out := new(ListVpcsResponse)
+func (c *vpcClient) ListVpcs(ctx context.Context, in *VpcSearch, opts ...grpc.CallOption) (*VpcsResponse, error) {
+	out := new(VpcsResponse)
 	err := c.cc.Invoke(ctx, "/network.vpc.Vpc/ListVpcs", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *vpcClient) CreateVpc(ctx context.Context, in *VpcMessage, opts ...grpc.CallOption) (*VpcsResponse, error) {
+	out := new(VpcsResponse)
+	err := c.cc.Invoke(ctx, "/network.vpc.Vpc/CreateVpc", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *vpcClient) UpdateVpc(ctx context.Context, in *VpcMessage, opts ...grpc.CallOption) (*VpcsResponse, error) {
+	out := new(VpcsResponse)
+	err := c.cc.Invoke(ctx, "/network.vpc.Vpc/UpdateVpc", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *vpcClient) DeleteVpc(ctx context.Context, in *VpcSearch, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/network.vpc.Vpc/DeleteVpc", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -52,8 +83,11 @@ func (c *vpcClient) ListVpcs(ctx context.Context, in *ListVpcsRequest, opts ...g
 // All implementations must embed UnimplementedVpcServer
 // for forward compatibility
 type VpcServer interface {
-	GetVpc(context.Context, *GetVpcRequest) (*GetVpcResponse, error)
-	ListVpcs(context.Context, *ListVpcsRequest) (*ListVpcsResponse, error)
+	GetVpc(context.Context, *VpcSearch) (*VpcsResponse, error)
+	ListVpcs(context.Context, *VpcSearch) (*VpcsResponse, error)
+	CreateVpc(context.Context, *VpcMessage) (*VpcsResponse, error)
+	UpdateVpc(context.Context, *VpcMessage) (*VpcsResponse, error)
+	DeleteVpc(context.Context, *VpcSearch) (*emptypb.Empty, error)
 	mustEmbedUnimplementedVpcServer()
 }
 
@@ -61,11 +95,20 @@ type VpcServer interface {
 type UnimplementedVpcServer struct {
 }
 
-func (UnimplementedVpcServer) GetVpc(context.Context, *GetVpcRequest) (*GetVpcResponse, error) {
+func (UnimplementedVpcServer) GetVpc(context.Context, *VpcSearch) (*VpcsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetVpc not implemented")
 }
-func (UnimplementedVpcServer) ListVpcs(context.Context, *ListVpcsRequest) (*ListVpcsResponse, error) {
+func (UnimplementedVpcServer) ListVpcs(context.Context, *VpcSearch) (*VpcsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListVpcs not implemented")
+}
+func (UnimplementedVpcServer) CreateVpc(context.Context, *VpcMessage) (*VpcsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateVpc not implemented")
+}
+func (UnimplementedVpcServer) UpdateVpc(context.Context, *VpcMessage) (*VpcsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateVpc not implemented")
+}
+func (UnimplementedVpcServer) DeleteVpc(context.Context, *VpcSearch) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteVpc not implemented")
 }
 func (UnimplementedVpcServer) mustEmbedUnimplementedVpcServer() {}
 
@@ -81,7 +124,7 @@ func RegisterVpcServer(s grpc.ServiceRegistrar, srv VpcServer) {
 }
 
 func _Vpc_GetVpc_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetVpcRequest)
+	in := new(VpcSearch)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -93,13 +136,13 @@ func _Vpc_GetVpc_Handler(srv interface{}, ctx context.Context, dec func(interfac
 		FullMethod: "/network.vpc.Vpc/GetVpc",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(VpcServer).GetVpc(ctx, req.(*GetVpcRequest))
+		return srv.(VpcServer).GetVpc(ctx, req.(*VpcSearch))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Vpc_ListVpcs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListVpcsRequest)
+	in := new(VpcSearch)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -111,7 +154,61 @@ func _Vpc_ListVpcs_Handler(srv interface{}, ctx context.Context, dec func(interf
 		FullMethod: "/network.vpc.Vpc/ListVpcs",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(VpcServer).ListVpcs(ctx, req.(*ListVpcsRequest))
+		return srv.(VpcServer).ListVpcs(ctx, req.(*VpcSearch))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Vpc_CreateVpc_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(VpcMessage)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VpcServer).CreateVpc(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/network.vpc.Vpc/CreateVpc",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VpcServer).CreateVpc(ctx, req.(*VpcMessage))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Vpc_UpdateVpc_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(VpcMessage)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VpcServer).UpdateVpc(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/network.vpc.Vpc/UpdateVpc",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VpcServer).UpdateVpc(ctx, req.(*VpcMessage))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Vpc_DeleteVpc_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(VpcSearch)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VpcServer).DeleteVpc(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/network.vpc.Vpc/DeleteVpc",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VpcServer).DeleteVpc(ctx, req.(*VpcSearch))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -130,6 +227,18 @@ var Vpc_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListVpcs",
 			Handler:    _Vpc_ListVpcs_Handler,
+		},
+		{
+			MethodName: "CreateVpc",
+			Handler:    _Vpc_CreateVpc_Handler,
+		},
+		{
+			MethodName: "UpdateVpc",
+			Handler:    _Vpc_UpdateVpc_Handler,
+		},
+		{
+			MethodName: "DeleteVpc",
+			Handler:    _Vpc_DeleteVpc_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
