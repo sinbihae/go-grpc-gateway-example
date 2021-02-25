@@ -26,7 +26,8 @@ func CustomMatcher(key string) (string, bool) {
 	case "x-koscom-secret-key":
 		return key, true
 	default:
-		return runtime.DefaultHeaderMatcher(key)
+		return key, true
+		// return runtime.DefaultHeaderMatcher(key)
 	}
 }
 

@@ -9,7 +9,7 @@ gRPC server와 HTTP로 RESTful 하게 통신할 수 있게 해 준다. gRPC gate
 
 
 
-### grpc-kotlin-client 구성
+### grpc-kotlin-client 도입 구성
 
 ```
 WEB ---->  Gateway ---->  API Server(Grpc-Kotlin-Client  ----> Grpc-Go-Server(NCP Client)) ----> NCP Server
@@ -22,6 +22,7 @@ WEB ---->  Gateway ---->  API Server(Grpc-Kotlin-Client  ----> Grpc-Go-Server(NC
 
 
 #### grpc-gateway 도입 구성
+
 ```
 WEB ---->  Gateway ---->  API Server((Grpc-gateway) ----> Grpc-Go-Server(NCP Client)) ----> NCP Server
 ```
@@ -51,11 +52,24 @@ WEB ---->  Gateway ---->  API Server((Grpc-gateway) ----> Grpc-Go-Server(NCP Cli
   }
 ```
 
+#### 자동 생성되는 코드 
+
+```
+-rw-r--r--  1 sinbihae  staff    17K  2 23 17:21 //protobuf struct code
+-rw-r--r--  1 sinbihae  staff    27K  2 23 17:21 //http service code
+-rw-r--r--  1 sinbihae  staff   2.2K  2 25 09:11 vpc.proto
+-rw-r--r--  1 sinbihae  staff   8.2K  2 23 17:21 //grpc service code
+```
+
+
 #### grpc-gateway 확인 사항
 1. method(GET, POST, PUT, DELETE, FETCH) 모두 정의 가능
 2. Path Param, QueryString, Body 정의 가능
 3. Custom Header 적용 가능
 * 소스 코드 참고 
+
+#### grpc-gateway 도입시 필요한 부분
+1. Swagger 생성 필요. Autorest로 SDK 생성 등등...
 
 #### Grpc Server 구동
 
